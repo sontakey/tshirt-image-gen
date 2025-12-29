@@ -1,0 +1,11 @@
+node_modules
+src
+logs
+*.log
+.env
+.pm2
+test-api.sh
+ecosystem.config.cjs
+ecosystem.config.js
+pm2-backup.dump
+tshirt-image-gen-manus.tar.gz

@@ -1,0 +1,113 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║          T-SHIRT IMAGE GENERATION SERVER - QUICK REFERENCE CARD              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+📍 PUBLIC URL
+   https://3001-ivmkj07faiter6yf3whev-ee373f36.us2.manus.computer
+
+📁 PROJECT DIRECTORY
+   /home/ubuntu/tshirt-image-gen
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔧 PM2 COMMANDS
+
+   View Status:           pm2 status
+   View Logs:             pm2 logs tshirt-image-gen
+   Restart:               pm2 restart tshirt-image-gen
+   Stop:                  pm2 stop tshirt-image-gen
+   Start:                 pm2 start tshirt-image-gen
+   Monitor:               pm2 monit
+   Show Details:          pm2 show tshirt-image-gen
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔄 UPDATE APPLICATION
+
+   1. cd /home/ubuntu/tshirt-image-gen
+   2. # Make changes to src/ files
+   3. pnpm build
+   4. pm2 reload tshirt-image-gen
+   5. pm2 save
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🧪 TEST ENDPOINTS
+
+   Health Check:
+   curl https://3001-ivmkj07faiter6yf3whev-ee373f36.us2.manus.computer/health
+
+   API Documentation:
+   curl https://3001-ivmkj07faiter6yf3whev-ee373f36.us2.manus.computer/
+
+   Generate Complete Design:
+   curl -X POST https://3001-ivmkj07faiter6yf3whev-ee373f36.us2.manus.computer/api/generate-complete \
+     -H "Content-Type: application/json" \
+     -d '{"prompt": "A cosmic astronaut", "tshirtColor": "black"}'
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 API ENDPOINTS
+
+   GET  /health                      - Health check
+   GET  /                            - API documentation
+   POST /api/generate                - Generate image
+   POST /api/generate-transparent    - Generate transparent PNG
+   POST /api/generate-mockup         - Create t-shirt mockup
+   POST /api/generate-complete       - Generate logo + mockup
+   POST /api/generate-batch          - Batch generate images
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📝 LOG FILES
+
+   Error Log:     /home/ubuntu/tshirt-image-gen/logs/error.log
+   Output Log:    /home/ubuntu/tshirt-image-gen/logs/out.log
+   Combined Log:  /home/ubuntu/tshirt-image-gen/logs/combined.log
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚙️ CONFIGURATION
+
+   Environment File:  /home/ubuntu/tshirt-image-gen/.env
+   PM2 Config:        /home/ubuntu/tshirt-image-gen/ecosystem.config.cjs
+   Systemd Service:   /etc/systemd/system/pm2-ubuntu.service
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎨 SUPPORTED T-SHIRT COLORS
+
+   black, white, navy, gray, red, blue
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚨 TROUBLESHOOTING
+
+   Server Not Responding:
+   pm2 restart tshirt-image-gen
+
+   Check Errors:
+   pm2 logs tshirt-image-gen --err --lines 50
+
+   Check Memory:
+   pm2 monit
+
+   Verify Running:
+   pm2 status
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📚 DOCUMENTATION
+
+   PERMANENT_DEPLOYMENT.md  - Complete deployment guide
+   DEPLOYMENT_GUIDE.md      - Installation and usage guide
+   PROJECT_SUMMARY.md       - Project overview
+   README.md                - Original documentation
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ DEPLOYMENT STATUS: ONLINE AND RUNNING
+🔄 AUTO-RESTART: ENABLED
+🚀 BOOT ON STARTUP: ENABLED
+
+Last Updated: December 29, 2025
