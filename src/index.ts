@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import ImageGenerationClient from './services/nanoBananaClient.js';
 import ImageComposer from './services/imageComposer.js';
+import ServerBackgroundRemoval from './services/serverBackgroundRemoval.js';
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ if (!forgeApiUrl) {
 
 const imageGen = new ImageGenerationClient(forgeApiKey, forgeApiUrl);
 const imageComposer = new ImageComposer();
+const bgRemoval = new ServerBackgroundRemoval();
 
 app.use(cors());
 app.use(bodyParser.json({ limit: '50mb' }));
@@ -86,7 +88,7 @@ app.post('/api/generate', async (req: Request, res: Response) => {
 
 app.post('/api/generate-transparent', async (req: Request, res: Response) => {
   try {
-    const { prompt, width = 1024, height = 1024, seed } = req.body;
+    const { prompt, width = 1024, height = 1024, seed, threshold = 240 } = req.body;
 
     if (!prompt) {
       return res.status(400).json({
@@ -96,15 +98,31 @@ app.post('/api/generate-transparent', async (req: Request, res: Response) => {
 
     console.log(`Generating transparent image for prompt: "${prompt}"`);
 
+    // Generate image with white background
     const result = await imageGen.generateTransparentImage(prompt, {
       width,
       height,
       seed,
     });
 
+    // Remove white background server-side
+    console.log('Removing white background server-side...');
+    const transparentBuffer = await bgRemoval.removeWhiteBackground(result.image_url, {
+      threshold,
+      smoothEdges: true,
+    });
+
+    // Convert to base64 for response
+    const transparentBase64 = transparentBuffer.toString('base64');
+
     res.json({
       success: true,
-      data: result,
+      data: {
+        image_url: `data:image/png;base64,${transparentBase64}`,
+        original_url: result.image_url,
+        seed: result.seed,
+        prompt: result.prompt,
+      },
     });
   } catch (error) {
     console.error('Transparent image generation error:', error);
@@ -156,7 +174,7 @@ app.post('/api/generate-mockup', async (req: Request, res: Response) => {
 
 app.post('/api/generate-complete', async (req: Request, res: Response) => {
   try {
-    const { prompt, tshirtColor = 'black', width = 1024, height = 1024 } = req.body;
+    const { prompt, tshirtColor = 'black', width = 1024, height = 1024, threshold = 240 } = req.body;
 
     if (!prompt) {
       return res.status(400).json({
@@ -166,13 +184,25 @@ app.post('/api/generate-complete', async (req: Request, res: Response) => {
 
     console.log(`Generating complete design for prompt: "${prompt}"`);
 
+    // Generate image with white background
     const logoResult = await imageGen.generateTransparentImage(prompt, {
       width,
       height,
     });
 
+    // Remove white background server-side
+    console.log('Removing white background server-side...');
+    const transparentBuffer = await bgRemoval.removeWhiteBackground(logoResult.image_url, {
+      threshold,
+      smoothEdges: true,
+    });
+
+    // Create mockup with transparent design
+    // Convert transparent buffer to data URL for imageComposer
+    const transparentDataUrl = `data:image/png;base64,${transparentBuffer.toString('base64')}`;
+
     const mockupBuffer = await imageComposer.composeTshirtMockup({
-      designUrl: logoResult.image_url,
+      designUrl: transparentDataUrl,
       tshirtColor,
       positionTop: 300,
       designWidth: 800,
@@ -180,11 +210,13 @@ app.post('/api/generate-complete', async (req: Request, res: Response) => {
     });
 
     const mockupBase64 = mockupBuffer.toString('base64');
+    const logoBase64 = transparentBuffer.toString('base64');
 
     res.json({
       success: true,
       data: {
-        logoUrl: logoResult.image_url,
+        logoUrl: `data:image/png;base64,${logoBase64}`,
+        originalLogoUrl: logoResult.image_url,
         imageUrl: `data:image/png;base64,${mockupBase64}`,
         prompt: prompt,
         seed: logoResult.seed,
