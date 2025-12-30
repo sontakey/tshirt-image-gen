@@ -87,7 +87,8 @@ export class ImageGenerationClient {
     prompt: string,
     options: Partial<GenerateImageRequest> = {}
   ): Promise<GenerateImageResponse> {
-    const enhancedPrompt = `${prompt}, transparent background, PNG, no background, isolated design`;
+    // Generate with CLEAN WHITE BACKGROUND for client-side transparency removal
+    const enhancedPrompt = `${prompt}, pure white background, clean white background, isolated design on white, no shadows on background, sharp edges`;
     
     return this.generateImage({
       prompt: enhancedPrompt,
